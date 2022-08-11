@@ -1,0 +1,39 @@
+server:
+  port: 8088
+
+spring:
+  datasource:
+#    type: com.zaxxer.hikari.HikariDataSource
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://127.0.0.1:3306/study_springboot_jsp?serverTimezone=GMT%2B8&characterEncoding=utf-8&userSSL=false
+#    username: root
+#    password: root
+    dynamic:
+      primary: master
+      strict: false
+      datasource:
+        master:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://127.0.0.1:3306/study_springboot_jsp?serverTimezone=GMT%2B8&characterEncoding=utf-8&userSSL=false
+          username: root
+          password: root
+        slave:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://127.0.0.1:3306/study_springboot_jsp_two?serverTimezone=GMT%2B8&characterEncoding=utf-8&userSSL=false
+          username: root
+          password: root
+
+  mvc:
+    view:
+      prefix: /
+      suffix: .jsp
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  mapper-locations: /**/*Mapper.xml
+  global-config:
+    db-config:
+      id-type: assign_id
+  type-aliases-package: com.eiit.presystemeiit.bean
+  type-enums-package: com.eiit.presystemeiit.enum
