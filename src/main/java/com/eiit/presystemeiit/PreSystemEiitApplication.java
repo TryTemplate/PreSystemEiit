@@ -25,7 +25,7 @@ public class PreSystemEiitApplication {
      * @param ctx
      * @return
      */
-    @Bean
+//    @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
 
