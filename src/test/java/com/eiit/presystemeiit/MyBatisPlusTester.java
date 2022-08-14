@@ -6,9 +6,9 @@ package com.eiit.presystemeiit;
  * @description default
  */
 
+import com.eiit.presystemeiit.mapper.EmpMapper;
 import com.eiit.presystemeiit.model.Department;
 import com.eiit.presystemeiit.model.Emp;
-import com.eiit.presystemeiit.mapper.EmpMapper;
 import com.eiit.presystemeiit.service.DepartmentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

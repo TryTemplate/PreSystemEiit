@@ -9,8 +9,8 @@ spring:
 #    username: root
 #    password: root
     dynamic:
-      primary: master
       strict: false
+      primary: master
       datasource:
         master:
           driver-class-name: com.mysql.cj.jdbc.Driver
@@ -42,10 +42,39 @@ spring:
         min-idle: 5       # 连接池中的最小空闲连接
         max-wait: -1      # 连接池最大阻塞等待时间（使用负值表示没有限制）
 
+
   mvc:
     view:
       prefix: /
       suffix: .jsp
+
+
+
+
+
+
+
+  #配置 SMTP 服务器地址
+  mail:
+    host: smtp.yeah.net
+    #SMTP 服务器的端口
+    port: 465
+    #配置邮箱用户名
+    username: Ljguang0401@163.com
+    #配置密码，注意，不是真正的密码，而是刚刚申请到的授权码
+    #    password: Ekvision888
+    password: NKLUTJBIDGAGVYFG
+    #默认的邮件编码
+    default-encoding: UTF-8
+    #配饰 SSL 加密工厂
+    properties.mail.smtp.socketFactoryClass: javax.net.ssl.SSLSocketFactory
+    #表示开启 DEBUG 模式，这样，邮件发送过程的日志会在控制台打印出来，方便排查错误
+    properties.mail.debug: true
+    #官方建议使用 465 端口，而 465 端口是 SSL 协议的，所以不仅要换端口，
+    #还需要进行 SSL 协议替换。下面是在 propert.properties 进行的邮件发送相关配置，
+    protocol: smtp
+    properties.mail.smtp.ssl.enable: true
+    properties.mail.smtp.socketFactory.port: 25
 
 mybatis-plus:
   configuration:
@@ -56,3 +85,14 @@ mybatis-plus:
       id-type: assign_id
   type-aliases-package: com.eiit.presystemeiit.bean
   type-enums-package: com.eiit.presystemeiit.enum
+
+base:
+  netty:
+    prot: 17071
+    bossThreads: 2
+    workThreads: 8
+  mem:
+    location: 127.0.0.1
+    prot: 11211
+  msg: this is a masg config
+  info: this is a info config

@@ -6,12 +6,9 @@ package com.eiit.presystemeiit;
  * @description default
  */
 
-import com.eiit.presystemeiit.model.Emp;
-import com.eiit.presystemeiit.service.EmpService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.connection.RedisClusterNode;
 import org.springframework.data.redis.core.RedisTemplate;
 
 @SpringBootTest
