@@ -1,6 +1,8 @@
 package com.eiit.presystemeiit;
 
 import org.mybatis.spring.annotation.MapperScan;
+import org.redisson.Redisson;
+import org.redisson.config.Config;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,7 +27,7 @@ public class PreSystemEiitApplication {
      * @param ctx
      * @return
      */
-//    @Bean
+    @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
 
@@ -38,6 +40,14 @@ public class PreSystemEiitApplication {
             }
 
         };
+    }
+
+    //单机redisson配置
+    //Bean
+    public Redisson redisson(){
+        Config config = new Config();
+        config.useSingleServer().setAddress("redis://127.0.0.1:6379").setPassword("password..").setDatabase(0);
+        return (Redisson) Redisson.create(config);
     }
 
 

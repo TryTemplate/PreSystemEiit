@@ -10,6 +10,9 @@ import com.eiit.presystemeiit.service.DepartmentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.redisson.Redisson;
+import org.redisson.api.RBloomFilter;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -45,6 +48,9 @@ public class DeptRestController {
 
     @Autowired
     private RedisHelperImpl redisHelper;
+
+    @Autowired
+    private RedissonClient redisson;
 
 
     @Cacheable(key ="'dept_list_'.concat(#pageNum).concat('_').concat(#pageSize)",unless = "#result=null")
@@ -117,6 +123,34 @@ public class DeptRestController {
             str = (String) redisHelper.getValue("test");
         }catch (Exception e){
             return new ResultBean<>(null).setRetCode(Constants.RET_CODE.FAIL);
+        }
+
+        return new ResultBean<>(str).setRetCode(Constants.RET_CODE.SUCCESS);
+    }
+
+
+    @ApiOperation(value = "【Test】", notes = "Test", produces="application/json", position = 5)
+    @GetMapping("/test")
+    public ResultBean testRedission(){
+
+        String str = null;
+        try {
+
+            RBloomFilter<String> bloom = redisson.getBloomFilter("name");
+            bloom.tryInit(1000000L, 0.01);
+
+            bloom.add("zhangsan");
+            bloom.add("lisi");
+            bloom.add("wangwu");
+            bloom.add("zhaoliu");
+
+            System.out.println(bloom.contains("ljg"));
+            System.out.println(bloom.contains("wangwu"));
+
+            str = (String) redisHelper.getValue("test");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResultBean<>().setRetCode(Constants.RET_CODE.FAIL);
         }
 
         return new ResultBean<>(str).setRetCode(Constants.RET_CODE.SUCCESS);
