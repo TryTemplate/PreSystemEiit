@@ -39,11 +39,14 @@ public class MyBatisPlusTester {
 
     @Test
     public void testInsertDept() {
-        Department dept = new Department();
-        dept.setDeptName("总裁办");
-        dept.setDeptDescription("eiit总裁办");
-        boolean save = departmentService.save(dept);
-        System.out.println(dept);
+
+        for (int i = 6; i < 500; i++) {
+            Department dept = new Department();
+            dept.setDeptName("总裁办" + i);
+            dept.setDeptDescription("eiit总裁办" + i);
+            boolean save = departmentService.save(dept);
+            System.out.println(dept);
+        }
     }
 
     @Test

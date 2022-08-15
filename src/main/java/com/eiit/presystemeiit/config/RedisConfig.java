@@ -1,21 +1,30 @@
 package com.eiit.presystemeiit.config;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.cache.interceptor.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
-import java.lang.reflect.Method;
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Ahtuor liujingguang
@@ -26,29 +35,28 @@ import java.lang.reflect.Method;
 @Configuration
 @AutoConfigureAfter(RedisAutoConfiguration.class)
 @EnableCaching
-public class RedisConfig  extends CachingConfigurerSupport {
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 300)      //session过期时间，单位为秒
+public class RedisConfig extends CachingConfigurerSupport {
     /**
      * 自定义生成key的规则
      */
     @Override
+    @Bean
     public KeyGenerator keyGenerator() {
-        return new KeyGenerator() {
-            @Override
-            public Object generate(Object o, Method method, Object... objects) {
-                //格式化缓存key字符串
-                StringBuilder sb = new StringBuilder();
-                //追加类名
-                sb.append(o.getClass().getName());
-                //追加方法名
-                sb.append(method.getName());
-                //遍历参数并且追加
-                for (Object obj : objects) {
-                    sb.append(obj.toString());
-                }
-                System.out.println("调用Redis缓存Key : " + sb);
-                return sb.toString();
+        return (o, method, objects) -> {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(o.getClass().getSimpleName());
+            stringBuilder.append(".");
+            stringBuilder.append(method.getName());
+            stringBuilder.append("[");
+            for (Object obj : objects) {
+                stringBuilder.append(obj.toString());
             }
+            stringBuilder.append("]");
+            System.out.println("调用Redis缓存Key : " + stringBuilder);
+            return stringBuilder.toString();
         };
+
     }
 
     /**
@@ -58,12 +66,41 @@ public class RedisConfig  extends CachingConfigurerSupport {
      */
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
-        RedisCacheManager redisCacheManager = RedisCacheManager.create(connectionFactory);
+        RedisCacheManager redisCacheManager =
+                RedisCacheManager.builder(connectionFactory)
+                        .cacheDefaults(defaultCacheConfig(10000))
+                        .withInitialCacheConfigurations(initConfigurationMap())
+                        .transactionAware().build();
         return redisCacheManager;
     }
 
+    private RedisCacheConfiguration defaultCacheConfig(Integer second) {
+        Jackson2JsonRedisSerializer<Object> redisSerializer =
+                new Jackson2JsonRedisSerializer<>(Object.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        objectMapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        redisSerializer.setObjectMapper(objectMapper);
+
+        RedisCacheConfiguration configuration =
+                RedisCacheConfiguration.defaultCacheConfig()
+                        .entryTtl(Duration.ofSeconds(second))
+                        .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+                        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
+                        .disableCachingNullValues();
+        return configuration;
+    }
+
+    private Map<String, RedisCacheConfiguration> initConfigurationMap() {
+        Map<String, RedisCacheConfiguration> configurationMap = new HashMap<>();
+        configurationMap.put("dept", defaultCacheConfig(1500));
+        configurationMap.put("emp", defaultCacheConfig(1500));
+        return configurationMap;
+    }
+
+
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory){
+    public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new GenericJackson2JsonRedisSerializer());

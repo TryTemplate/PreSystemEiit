@@ -23,11 +23,14 @@ spring:
           username: root
           password: root
 
+  cache:
+    type: redis
+
   redis:
     password: ljg123..
     timeout: 15000ms
     cluster:
-      max-redirects: 3    # 获取失败最大重试次数
+      max-redirects: 3                                        #获取失败最大重试次数
       nodes:
         - 182.61.50.148:6379
         - 101.33.236.90:6379
@@ -37,62 +40,63 @@ spring:
         - 49.235.206.69:6399
     lettuce:
       pool:
-        max-active: 1024  #连接池最大连接数（使用负值表示没有限制）
-        max-idle: 10      # 连接池中的最大空闲连接
-        min-idle: 5       # 连接池中的最小空闲连接
-        max-wait: -1      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-active: 1024                                      #连接池最大连接数（使用负值表示没有限制）
+        max-idle: 10                                          # 连接池中的最大空闲连接
+        min-idle: 5                                           # 连接池中的最小空闲连接
+        max-wait: -1                                          # 连接池最大阻塞等待时间（使用负值表示没有限制）
 
 
   mvc:
     view:
       prefix: /
       suffix: .jsp
+    format:
+      date: yyyy-MM-dd
+      date-time: yyyy-MM-dd HH:mm:ss
+      time: HH:mm:ss
 
 
 
 
-
-
-
-  #配置 SMTP 服务器地址
+#配置 SMTP 服务器地址
   mail:
     host: smtp.yeah.net
-    #SMTP 服务器的端口
-    port: 465
-    #配置邮箱用户名
-    username: Ljguang0401@163.com
-    #配置密码，注意，不是真正的密码，而是刚刚申请到的授权码
+    port: 465                                                 #SMTP 服务器的端口
+    username: Ljguang0401@163.com                             #配置邮箱用户名
     #    password: Ekvision888
-    password: NKLUTJBIDGAGVYFG
-    #默认的邮件编码
-    default-encoding: UTF-8
-    #配饰 SSL 加密工厂
-    properties.mail.smtp.socketFactoryClass: javax.net.ssl.SSLSocketFactory
-    #表示开启 DEBUG 模式，这样，邮件发送过程的日志会在控制台打印出来，方便排查错误
-    properties.mail.debug: true
-    #官方建议使用 465 端口，而 465 端口是 SSL 协议的，所以不仅要换端口，
-    #还需要进行 SSL 协议替换。下面是在 propert.properties 进行的邮件发送相关配置，
+    password: NKLUTJBIDGAGVYFG                                #配置密码，注意，不是真正的密码，而是刚刚申请到的授权码
+    default-encoding: UTF-8                                   #默认的邮件编码
+    properties.mail.smtp.socketFactoryClass: javax.net.ssl.SSLSocketFactory     #配饰 SSL 加密工厂
+    properties.mail.debug: true                                                 #表示开启 DEBUG 模式，这样，邮件发送过程的日志会在控制台打印出来，方便排查错误
+                                                                                #官方建议使用 465 端口，而 465 端口是 SSL 协议的，所以不仅要换端口，还需要进行 SSL 协议替换。
+                                                                                #   下面是在 propert.properties 进行的邮件发送相关配置，
     protocol: smtp
     properties.mail.smtp.ssl.enable: true
     properties.mail.smtp.socketFactory.port: 25
 
+
+
+#Mybatis-Plsu相关配置
 mybatis-plus:
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-#  mapper-locations: /**/*Mapper.xml
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl     #开启MybatisPlus执行日志
+  mapper-locations: /**/*Mapper.xml                           #mapper位置信息 mybatis默认识别位置为resource/mapper/*.xml
   global-config:
     db-config:
-      id-type: assign_id
-  type-aliases-package: com.eiit.presystemeiit.bean
-  type-enums-package: com.eiit.presystemeiit.enum
+      id-type: assign_id                                      #主键类型全局配置 auto.自增 assign_id.雪花算法
+  type-aliases-package: com.eiit.presystemeiit.bean           #扫描映射的库表pojo
+  type-enums-package: com.eiit.presystemeiit.enum             #数据库字段泛型
 
+
+
+#自定义配置
 base:
-  netty:
-    prot: 17071
-    bossThreads: 2
-    workThreads: 8
-  mem:
-    location: 127.0.0.1
-    prot: 11211
-  msg: this is a masg config
-  info: this is a info config
+  netty:                                                      #netty相关配置
+    prot: 17071                                               #端口
+    bossThreads: 2                                            #负责处理连接相关的线程数
+    workThreads: 8                                            #负责处理业务相关的线程数
+  mem:                                                        #memcached相关配置
+    location: 127.0.0.1                                       #memcached地址
+    prot: 11211                                               #memcached端口
+  msg: this is a masg config                                  #自定义配置
+  info: this is a info config                                 #自定义配置

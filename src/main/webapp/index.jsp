@@ -19,15 +19,15 @@
 
 <table>
     <tr>
-        <td>序号</td>
-        <td>id</td>
-        <td>名称</td>
-        <td>操作</td>
+        <td align="center">序号</td>
+        <td align="center">id</td>
+        <td align="center">名称</td>
+        <td align="center">操作</td>
     </tr>
 
         <c:forEach items="${deptList}" var="dept" varStatus="vs">
 
-            <tr>
+            <tr align="center">
                 <td>${(page.current-1)*page.size+vs.count}</td>
 
                 <%--
