@@ -21,7 +21,9 @@ public class PreSystemEiitApplication {
 
 
     /**
+     * 利用监听器实现
      * 输出启动加载的类 bean **
+     *
      * @Author liujingguang
      *
      * @param ctx
