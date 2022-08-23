@@ -299,30 +299,49 @@ public interface Constants {
     enum MQ_CODE {
         ;
         //简单模式
-        // 不需要交换机
-        // public static final String SIMPLE_EXCHANGE = "service_technical";
-        public static final String SIMPLE_EXCHANGE_QUEUE_NAME_WORK = "go_work";
+        //public static final String SIMPLE_EXCHANGE = "simple_exchange";           // 不需要交换机
+        public static final String SIMPLE_EXCHANGE_QUEUE = "simple_queue";
+
+        //工作模式
+        public static final String WORK_EXCHANGE = "work_exchange";
+        public static final String WORK_EXCHANGE_QUEUE = "work_queue";
 
         //订阅模式
-        public static final String FANOUT_EXCHANGE = "service_technical_fanout";
+        public static final String FANOUT_EXCHANGE = "fanout_exchange";
         public static final String FANOUT_EXCHANGE_QUEUE_NAME_ONE = "fanout_queue_one";
         public static final String FANOUT_EXCHANGE_QUEUE_NAME_TWO = "fanout_queue_two";
 
         //routing模式
-        public static final String ROUTING_EXCHANGE = "service_technical_routing";
+        public static final String ROUTING_EXCHANGE = "routing_exchange";
         public static final String ROUTING_EXCHANGE_QUEUE_NAME_ONE = "routing_queue_one";
         public static final String ROUTING_EXCHANGE_QUEUE_NAME_TWO = "routing_queue_two";
         public static final String ROUTING_EXCHANGE_KEY_ONE = "routing_key_one";
         public static final String ROUTING_EXCHANGE_KEY_TWO = "routing_key_two";
         public static final String ROUTING_EXCHANGE_KEY_THR = "routing_key_thr";
 
+        public static final String ROUTING_DEFILD_KEY = "routing_defild_key";
+
+
         //Topics模式
-        public static final String TOPICS_EXCHANGE = "service_technical_topics";
-        public static final String TOPICS_EXCHANGE_QUEUE_NAME_ONE = "topics_queue_one";
-        public static final String TOPICS_EXCHANGE_QUEUE_NAME_TWO = "topics_queue_two";
-        public static final String TOPICS_EXCHANGE_KEY_ONE = "topics.*";
-        public static final String TOPICS_EXCHANGE_KEY_TWO = "*.two";
-        public static final String TOPICS_EXCHANGE_KEY_THR = "*.one";
+        public static final String TOPICS_EXCHANGE = "topics_exchange";                                 //通配符模式交换机名称
+        public static final String TOPICS_EXCHANGE_QUEUE_NAME_NEWS = "topics_queue_news";               //通配符模式队列一 (项目一订阅 新闻)
+        public static final String TOPICS_EXCHANGE_QUEUE_NAME_WEATHER = "topics_queue_weather";         //通配符模式队列二 (项目一订阅 天气)
+        public static final String TOPICS_EXCHANGE_QUEUE_NAME_MOTION = "topics_queue_motion";           //通配符模式队列三 (项目二订阅 运动)
+        public static final String TOPICS_EXCHANGE_KEY_ONE = "news.*";
+        public static final String TOPICS_EXCHANGE_KEY_TWO = "weather.*";
+        public static final String TOPICS_EXCHANGE_KEY_THR = "motion.#";
+
+        //死信队列
+        public static final String DEAD_EXCHANGE = "dead_exchange";
+        public static final String DEAD_QUEUE_LIST = "dead_queue_list";
+        public static final String DEAD_QUEUE_KEY = "dead_queue_key";
+
+        public static final Integer DEAD_QUEUE_TTL = 1000 * 300;
+
+        //延迟队列
+        public static final String DELAY_EXCHANGE = "delay_exchange";
+        public static final String DELAY_QUEUE_LIST = "delay_queue_list";
+        public static final String DELAY_QUEUE_KEY = "delay_queue_key";
 
     }
 }

@@ -1,4 +1,4 @@
-package com.eiit.presystemeiit.config;
+package com.eiit.presystemeiit.event;
 
 import com.eiit.presystemeiit.netty.NettyServer;
 import org.springframework.boot.ApplicationArguments;

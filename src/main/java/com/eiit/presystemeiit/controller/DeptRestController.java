@@ -4,15 +4,15 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.eiit.presystemeiit.common.Constants;
 import com.eiit.presystemeiit.common.ResultBean;
 import com.eiit.presystemeiit.model.Department;
-import com.eiit.presystemeiit.redis.RedisHelper;
+import com.eiit.presystemeiit.rabbitmq.simple.MhRabbitTemplate;
 import com.eiit.presystemeiit.redis.RedisHelperImpl;
 import com.eiit.presystemeiit.service.DepartmentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.redisson.Redisson;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RedissonClient;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -51,6 +51,11 @@ public class DeptRestController {
 
     @Autowired
     private RedissonClient redisson;
+
+    @Autowired
+    private MhRabbitTemplate mhRabbitTemplate;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
 
     @Cacheable(key ="'dept_list_'.concat(#pageNum).concat('_').concat(#pageSize)",unless = "#result=null")
@@ -154,6 +159,47 @@ public class DeptRestController {
         }
 
         return new ResultBean<>(str).setRetCode(Constants.RET_CODE.SUCCESS);
+    }
+
+
+    @ApiOperation(value = "【RabbitMq】", notes = "send", produces="application/json", position = 6)
+    @GetMapping("/sendmq")
+    public ResultBean sendMQ(String mesg, Integer type){
+
+        try {
+            Object i = redisHelper.getValue("project_visits");
+            mesg = "{\"type\":\"1\",\"id\":\"" + i + "\",\"name\":\"ljg" + i + "\",\"msg\":\"" + mesg + "\"}";
+            switch (type){
+                case 1 : mhRabbitTemplate.simpleMsg(mesg, Constants.MQ_CODE.SIMPLE_EXCHANGE_QUEUE);break;
+                case 2 : mhRabbitTemplate.sendWorkMsg(mesg, Constants.MQ_CODE.WORK_EXCHANGE_QUEUE);break;
+                case 3 : mhRabbitTemplate.sendFanoutMsg(mesg, Constants.MQ_CODE.FANOUT_EXCHANGE_QUEUE_NAME_ONE);break;
+                case 4 : mhRabbitTemplate.sendRoutingtMsg(mesg);break;
+                case 5 : mhRabbitTemplate.sendTopicstMsg(mesg);break;
+                case 6 : mhRabbitTemplate.sendDelayMsg(mesg, 10, Constants.MQ_CODE.DELAY_QUEUE_LIST);break;
+                default:
+                    System.out.println("nothing to do .");break;
+            }
+            redisHelper.valuePut("project_visits", Integer.parseInt(i.toString()) + 1);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResultBean<>(mesg).setRetCode(Constants.RET_CODE.FAIL).setRetInfo("error: " + e.getMessage());
+        }
+
+        return new ResultBean<>().setRetCode(Constants.RET_CODE.SUCCESS).setRetInfo("success");
+    }
+    @ApiOperation(value = "【RabbitMq】", notes = "get", produces="application/json", position = 7)
+    @GetMapping("/getmq")
+    public ResultBean getMQ(String mesg){
+
+        try {
+            String i = (String) redisHelper.getValue("project_visits");
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResultBean<>().setRetCode(Constants.RET_CODE.FAIL).setRetInfo("error: " + e.getMessage());
+        }
+
+        return new ResultBean<>().setRetCode(Constants.RET_CODE.SUCCESS).setRetInfo("success");
     }
 
 }
