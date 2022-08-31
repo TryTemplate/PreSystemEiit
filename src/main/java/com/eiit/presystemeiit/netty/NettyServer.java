@@ -45,12 +45,7 @@ public class NettyServer {
 
 
     public void start() throws InterruptedException {
-        Thread th = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                init();
-            }
-        });
+        Thread th = new Thread(() -> init());
         th.start();
     }
 
@@ -103,6 +98,7 @@ public class NettyServer {
             // 6. 收到关闭信号后，优雅关闭server的线程池，保护应用
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
+            LOG.error("netty server closed ~ ");
         }
 
     }
