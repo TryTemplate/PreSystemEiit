@@ -1,13 +1,9 @@
 package com.eiit.presystemeiit.netty.heart;
 
 import com.alibaba.fastjson.JSONObject;
-import com.eiit.presystemeiit.common.Constants;
 import com.eiit.presystemeiit.netty.utils.ChannelIdObj;
 import com.eiit.presystemeiit.netty.utils.SocketChannelSet;
-import com.eiit.presystemeiit.netty.utils.SocketResultBean;
 import com.eiit.presystemeiit.redis.RedisHelperImpl;
-import com.eiit.presystemeiit.utils.StringUtils;
-import freemarker.template.utility.DateUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -16,10 +12,7 @@ import io.netty.handler.timeout.IdleStateEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Date;
-import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.UUID;
 
 /**
  * @Anthor ljg

@@ -1,7 +1,7 @@
 package com.eiit.presystemeiit.mapper;
 
-import com.eiit.presystemeiit.model.Department;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.eiit.presystemeiit.model.Department;
 import org.apache.ibatis.annotations.Param;
 
 /**

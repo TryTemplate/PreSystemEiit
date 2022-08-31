@@ -6,8 +6,9 @@ import org.springframework.stereotype.Component;
 
 /**
  * 配置文件
- * @Date    2022年4月10日14:21:54
+ *
  * @author Liujingguang
+ * @Date 2022年4月10日14:21:54
  */
 
 @Component
@@ -40,9 +41,6 @@ public class PropertiesConfigure {
     @Value("${test_phone}")
     public String testPhone;
     //** ----------------------------------------------------------------------------------------------------------------------- ∧∧∧∧∧∧∧∧∧∧∧∧ **//
-
-
-
 
 
     //** ----------------------------------------------------------------------------------------------------------------------- ∨∨∨∨∨∨∨∨∨∨∨∨ **//
@@ -106,10 +104,6 @@ public class PropertiesConfigure {
     public String apkPrefix;
 
 
-
-
-
-
     /***************************    设备logo的存储地址    */
     @Value("${logo_mkdir_path}")
     public String logoMkdirPath;
@@ -123,7 +117,6 @@ public class PropertiesConfigure {
     //服务器参数配置
     //服务器接入码
     public static Integer accessCode = 0;
-
 
 
     //服务器参数配置

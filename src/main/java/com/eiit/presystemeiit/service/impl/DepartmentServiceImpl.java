@@ -1,9 +1,9 @@
 package com.eiit.presystemeiit.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.eiit.presystemeiit.mapper.DepartmentMapper;
 import com.eiit.presystemeiit.model.Department;
 import com.eiit.presystemeiit.service.DepartmentService;
-import com.eiit.presystemeiit.mapper.DepartmentMapper;
 import org.springframework.stereotype.Service;
 
 /**

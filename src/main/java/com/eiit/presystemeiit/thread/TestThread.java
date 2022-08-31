@@ -1,7 +1,6 @@
 package com.eiit.presystemeiit.thread;
 
 import com.eiit.presystemeiit.service.TestInterface;
-import com.google.common.base.Converter;
 
 import java.util.Arrays;
 import java.util.Collections;

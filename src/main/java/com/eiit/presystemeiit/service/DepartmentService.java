@@ -1,7 +1,7 @@
 package com.eiit.presystemeiit.service;
 
-import com.eiit.presystemeiit.model.Department;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.eiit.presystemeiit.model.Department;
 
 /**
 * @author Ljggg
